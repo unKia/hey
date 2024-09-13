@@ -1,23 +1,59 @@
-import { defineCollection, z } from 'astro:content'
+import { defineCollection, z } from "astro:content";
 
-const postsCollection = defineCollection({
+const blog = defineCollection({
+  // Type-check frontmatter using a schema
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      cover: z.string(),
+      category: z.string(),
+      // Transform string to Date object
+      pubDate: z
+        .string()
+        .or(z.date())
+        .transform((val) => new Date(val)),
+      updatedDate: z
+        .string()
+        .optional()
+        .transform((str) => (str ? new Date(str) : undefined)),
+    }),
+});
+
+const docs = defineCollection({
   schema: z.object({
     title: z.string(),
-    published: z.date(),
-    draft: z.boolean().optional().default(false),
-    description: z.string().optional().default(''),
-    image: z.string().optional().default(''),
-    tags: z.array(z.string()).optional().default([]),
-    category: z.string().optional().default(''),
-    lang: z.string().optional().default(''),
-
-    /* For internal use */
-    prevTitle: z.string().default(''),
-    prevSlug: z.string().default(''),
-    nextTitle: z.string().default(''),
-    nextSlug: z.string().default(''),
+    description: z.string(),
   }),
-})
-export const collections = {
-  posts: postsCollection,
-}
+});
+
+const guides = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    published: z.boolean().default(true),
+    featured: z.boolean().default(false),
+    pubDate: z
+      .string()
+      .or(z.date())
+      .transform((val) => new Date(val)),
+  }),
+});
+
+const releases = defineCollection({
+  // Type-check frontmatter using a schema
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      versionNumber: z.string(),
+      image: z.object({
+        src: image(),
+        alt: z.string(),
+      }),
+      // Transform string to Date object
+      date: z.date({ coerce: true }),
+    }),
+});
+
+export const collections = { blog, docs, guides, releases };
