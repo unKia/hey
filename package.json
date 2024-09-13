@@ -20,7 +20,7 @@
     "@astrojs/svelte": "^5.7.0",
     "@astrojs/tailwind": "^5.1.0",
     "@fontsource-variable/jetbrains-mono": "^5.0.22",
-    "@fontsource/roboto": "^5.0.14",
+    "@fontsource/saira": "^5.1.0",
     "@swup/astro": "^1.4.1",
     "astro": "^4.15.0",
     "astro-compress": "^2.3.1",
